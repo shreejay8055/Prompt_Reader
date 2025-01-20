@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Firebase Login</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-image: url('https://images.pexels.com/photos/590493/pexels-photo-590493.jpeg?auto=compress&cs=tinysrgb&w=600'); /* Update background image URL */
+            background-size: cover;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .box {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+        .form {
+            text-align: center;
+        }
+        .inputbox {
+            position: relative;
+        }
+        .inputbox input {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            outline: none;
+            border-bottom: 1px solid #ccc;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        .inputbox span {
+            pointer-events: none;
+            position: absolute;
+            left: 0;
+            top: 10px;
+            transition: 0.5s;
+            color: #999;
+            opacity: 0.5;
+            transition: opacity 0.5s;
+            font-size: 16px;
+        }
+        .inputbox input:focus ~ span,
+        .inputbox input:valid ~ span {
+            top: -15px;
+            opacity: 1;
+        }
+        .sub {
+            background: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        .sub:hover {
+            background: #0056b3;
+        }
+        .error {
+            color: red;
+        }
+        .register-button {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="box">
+            <div class="form">
+                <h2>Login Form</h2>
+                <form id="loginForm">
+                    <div class="inputbox">
+                        <input type="text" id="username" required>
+                        <span>Username</span>
+                    </div>
+                    <div class="inputbox">
+                        <input type="password" id="password" required>
+                        <span>Password</span>
+                    </div>
+                    <input type="submit" value="Login" class="sub">
+                    <p id="errorMessage" class="error"></p>
+                </form>
+                <div class="register-button">
+                    <button onclick="location.href='signup.html'">Register</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
+    import { getDatabase, ref, child, get } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-database.js";
+    
+    // Your web app's Firebase configuration
+    const firebaseConfig = {
+        apiKey: "AIzaSyDqYgyH-rb98D9VTgxD8LZQViQmlh2VPCc",
+        authDomain: "abcd-d4c18.firebaseapp.com",
+        projectId: "abcd-d4c18",
+        storageBucket: "abcd-d4c18.appspot.com",
+        messagingSenderId: "816791968991",
+        appId: "1:816791968991:web:21dda24ed5aa43efee9d6a"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    document.getElementById("loginForm").addEventListener('submit', async function(e) {
+        e.preventDefault();
+
+        const username = document.getElementById("username").value;
+        const password = document.getElementById("password").value;
+
+        console.log("Username:", username); // Debugging
+        console.log("Password:", password); // Debugging
+
+        try {
+            const snapshot = await get(child(ref(db), `users/${username}`));
+            if (snapshot.exists()) {
+                const userData = snapshot.val();
+                console.log("User data:", userData); // Debugging
+                if (userData.password === password) {
+                    console.log("Login successful, redirecting to abstract1.html");
+                    window.location.href = "abstract1.html";
+                } else {
+                    document.getElementById("errorMessage").innerText = "Wrong username or password.";
+                }
+            } else {
+                document.getElementById("errorMessage").innerText = "User not registered. Please register first.";
+            }
+        } catch (error) {
+            console.error("Error fetching user data:", error); // Debugging
+            document.getElementById("errorMessage").innerText = "An error occurred. Please try again.";
+        }
+    });
+</script>
+</html>
+
+
+
+
+

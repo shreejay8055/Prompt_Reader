@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Category</title>
+    <style>
+        body {
+            background-image: url('https://images.pexels.com/photos/2943603/pexels-photo-2943603.jpeg?auto=compress&cs=tinysrgb&w=600');
+            background-size: cover;
+            background-repeat: no-repeat;
+            font-family: Arial, sans-serif;
+            color: #fff;
+        }
+        .book-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            cursor: pointer;
+        }
+        .book-cover {
+            width: 50px;
+            height: 75px;
+            margin-right: 15px;
+        }
+        .book-details {
+            display: none;
+            margin-top: 10px;
+            border: 1px solid #fff;
+            padding: 10px;
+            background-color: rgba(0, 0, 0, 0.7);
+        }
+        .book-details h3, .book-details p, .book-details button {
+            margin: 5px 0;
+        }
+        a {
+            color: #fff;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        button {
+            padding: 5px 10px;
+            background-color: #fff;
+            color: #000;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #ccc;
+        }
+    </style>
+    <script>
+        function toggleDetails(id) {
+            const details = document.getElementById(id);
+            details.style.display = details.style.display === 'block' ? 'none' : 'block';
+        }
+    </script>
+</head>
+<body>
+    <h1>Books Category</h1>
+
+    <!-- Adventure Category -->
+    <h2>Adventure</h2>
+    <ul>
+        <li class="book-item" onclick="toggleDetails('details1')">
+            <img src="https://www.junkybooks.com/administrator/bookimages/62bb5dc67a71f2.31406030.jpeg" alt="Fire Water Cover" class="book-cover">
+            <span>Fire Water</span>
+        </li>
+        <div id="details1" class="book-details">
+            <h3>Fire Water</h3>
+            <p><strong>Author:</strong> John Doe</p>
+            <p><strong>Abstract:</strong> A thrilling tale of adventure and survival.</p>
+            <button onclick="window.location.href='https://www.junkybooks.com/book/reader.php?book=thebooks/62bb5dd3a6c9c-fire-water.pdf'">Read Book</button>
+        </div>
+        <li class="book-item" onclick="toggleDetails('details2')">
+            <img src="https://www.junkybooks.com/administrator/bookimages/62bb6005e65666.61803270.jpeg" alt="Bronze Magic Cover" class="book-cover">
+            <span>Bronze Magic</span>
+        </li>
+        <div id="details2" class="book-details">
+            <h3>Bronze Magic</h3>
+            <p><strong>Author:</strong> Jennifer Ealey</p>
+            <p><strong>Abstract:</strong> Bronze Magic by Jennifer Ealey is a captivating fantasy novel that transports readers to a world where magic and mystery intertwine. Set in a realm where ancient prophecies and powerful sorcery shape the destiny of kingdoms, the story follows the journey of a young heroine named Elara. Born with a rare gift for manipulating bronze, Elara discovers her magical abilities amidst a backdrop of political intrigue and looming conflict. As she navigates a treacherous landscape filled with dark forces and hidden agendas, Elara must unravel the secrets of her past and harness her powers to protect those she loves.</p>
+            <button onclick="window.location.href='https://www.junkybooks.com/book/reader.php?book=thebooks/62bb6005e657b-bronze-magic.pdf'">Read Book</button>
+        </div>
+        <li class="book-item" onclick="toggleDetails('details3')">
+            <img src="https://www.junkybooks.com/administrator/bookimages/62cee4d31bbd60.45340025.jpg" alt="Adventures of Huckleberry Finn Cover" class="book-cover">
+            <span>Adventures of Huckleberry Finn</span>
+        </li>
+        <div id="details3" class="book-details">
+            <h3>Adventures of Huckleberry Finn</h3>
+            <p><strong>Author:</strong> Mark Twain</p>
+            <p><strong>Abstract:</strong> The Adventures of Huckleberry Finn is a novel written by Mark Twain, first published in 1884. It follows the journey of Huckleberry Finn, a young boy who escapes his abusive father and embarks on a rafting adventure down the Mississippi River. Along the way, he encounters various characters, including the escaped slave Jim, with whom he forms a deep bond. The novel explores themes of friendship, freedom, and the moral conscience of society.</p>
+            <button onclick="window.location.href='https://www.junkybooks.com/book/reader.php?book=thebooks/62cee4d31bc21-adventures-of-huckleberry-finn.pdf'">Read Book</button>
+        </div>
+    </ul>
+
+    <!-- General Category -->
+    <h2>General</h2>
+    <ul>
+        <li class="book-item" onclick="toggleDetails('details4')">
+            <img src="https://www.junkybooks.com/administrator/bookimages/62c82b2c707736.99137957.jpg" alt="Fire Water Cover" class="book-cover">
+            <span>aiming-higher-strategies</span>
+        </li>
+        <div id="details4" class="book-details">
+            <h3>aiming-higher-strategies</h3>
+            <p><strong>Author:</strong> John Doe</p>
+            <p><strong>Abstract:</strong> Aiming Higher Strategies, Mike Morley presents a dynamic roadmap for personal and professional growth, offering strategies to unlock your full potential and achieve ambitious goals. Through a blend of motivational insights and practical advice, Morley guides readers on a journey of self-discovery and empowerment. Drawing from his extensive experience in leadership development and success coaching, Morley shares actionable techniques for setting clear objectives, overcoming obstacles, and maintaining momentum. Whether you're striving for career advancement, personal fulfillment, or both,Aiming Higher Strategies provides the tools and inspiration to elevate your life to new heights. </p>
+            <button onclick="window.location.href='https://www.junkybooks.com/book/reader.php?book=thebooks/62c82b2c707c9-aiming-higher-strategies.pdf'">Read Book</button>
+        </div>
+        <li class="book-item" onclick="toggleDetails('details5')">
+            <img src="https://www.junkybooks.com/administrator/bookimages/62e30b160ec240.36378255.JPG" alt="Bronze Magic Cover" class="book-cover">
+            <span>the-new-confessions-of-an-economic-hit-man</span>
+        </li>
+        <div id="details5" class="book-details">
+            <h3>the-new-confessions-of-an-economic-hit-man</h3>
+            <p><strong>Author:</strong> John Perkins</p>
+            <p><strong>Abstract:</strong> The New Confessions of an Economic Hit Man, John Perkins delivers a gripping exposé that sheds light on the hidden mechanisms of global economic manipulation and exploitation. Building upon his groundbreaking original work, Perkins offers updated insights and revelations into the tactics employed by economic hit men to further the agendas of corporate and political elites.</p>
+            <button onclick="window.location.href='https://www.junkybooks.com/book/reader.php?book=thebooks/62e30b160ec6d-the-new-confessions-of-an-economic-hit-man.pdf'">Read Book</button>
+        </div>
+        <li class="book-item" onclick="toggleDetails('details6')">
+            <img src="https://www.junkybooks.com/administrator/bookimages/659fb916d26473.71504988.jpg" alt="Adventures of Huckleberry Finn Cover" class="book-cover">
+            <span>introduction to financial accounting</span>
+        </li>
+        <div id="details6" class="book-details">
+            <h3>introduction to financial accounting</h3>
+            <p><strong>Author:</strong> David Annand and Henry Dauderis</p>
+            <p><strong>Abstract:</strong> Introduction to Financial Accounting by David Annand and Henry Dauderis is a comprehensive guide designed to demystify the fundamentals of financial accounting for students and professionals alike. Through clear explanations and practical examples, Annand and Dauderis navigate readers through the core principles of accounting, including recording transactions, preparing financial statements, and interpreting financial data. The book emphasizes conceptual understanding while also providing hands-on exercises to reinforce learning.</p>
+            <button onclick="window.location.href='https://www.junkybooks.com/book/reader.php?book=thebooks/659fb916d269a-introduction-to-financial-accounting.pdf'">Read Book</button>
+        </div>
+    </ul>
+
+    <!-- Historical Category -->
+    <h2>Historical</h2>
+    <ul>
+        <li class="book-item" onclick="toggleDetails('details7')">
+         <img src="https://www.junkybooks.com/administrator/bookimages/62c602a463c676.46474874.jpg" alt="Adventures of Huckleberry Finn Cover" class="book-cover">
+            <span>antonina-or-the-fall-of-rome</span>
+        </li>
+        <div id="details6" class="book-details">
+            <h3>antonina-or-the-fall-of-rome</h3>
+            <p><strong>Author:</strong> Wilkie Collins</p>
+            <p><strong>Abstract:</strong> Antonina or The Fall of Rome by Wilkie Collins is a historical novel set against the backdrop of the decline of the Roman Empire. The story follows the lives of several characters whose fates intertwine amidst the chaos and turmoil of Rome's collapse. At the center of the narrative is Antonina, a young woman of noble birth who finds herself caught in a web of intrigue, betrayal, and political upheaval. As the city faces external threats and internal strife, Antonina must navigate a perilous path to protect herself and her loved ones.</p>
+            <button onclick="window.location.href='https://www.junkybooks.com/book/reader.php?book=thebooks/62c602f43ce1f-antonina-or-the-fall-of-rome.pdf'">Read Book</button>
+        </div>
+     </ul>		
+
+

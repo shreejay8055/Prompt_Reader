@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Firebase Sign Up</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-image: url('https://images.pexels.com/photos/590493/pexels-photo-590493.jpeg?auto=compress&cs=tinysrgb&w=600'); /* Update background image URL */
+            background-size: cover;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .box {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+        .form {
+            text-align: center;
+        }
+        .inputbox {
+            margin-bottom: 15px;
+            position: relative; /* Add position relative for proper placement of the mandatory marks */
+            text-align: left; /* Align input boxes to the left */
+        }
+        
+        .inputbox input {
+            width: calc(100% - 20px); /* Adjust width to leave space for the text label */
+            padding: 10px;
+            border: none;
+            outline: none;
+            border-bottom: 1px solid #ccc;
+            font-size: 16px;
+        }
+        
+        .inputbox span {
+            pointer-events: none;
+            position: absolute;
+            left: 10px;
+            top: 10px;
+            transition: 0.5s;
+            color: #999;
+            display: inline-block;
+        }
+        
+        .inputbox input:focus ~ span,
+        .inputbox input:valid ~ span {
+            top: -10px;
+            left: 5px;
+            color: #333;
+            font-size: 12px;
+        }
+        .sub {
+            background: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        .sub:hover {
+            background: #0056b3;
+        }
+        .login-button {
+            display: none; /* Initially hide the login button */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="box">
+            <div class="form">
+                <h2>Sign Up Form</h2>
+                <form>
+                    <div class="inputbox">
+                        <input type="text" id="username" required list="usernames">
+                        <span>Username</span>
+                        <datalist id="usernames">
+                            <option value="user1">
+                            <option value="user2">
+                            <option value="user3">
+                            <!-- Add more options as needed -->
+                        </datalist>
+                    </div>
+                    <div class="inputbox">
+                        <input type="email" id="email" required>
+                        <span>Email</span>
+                    </div>
+                    <div class="inputbox">
+                        <input type="password" id="password" required>
+                        <span>Password</span>
+                    </div>
+                    <input type="submit" value="Sign Up" class="sub" id="submit">
+                </form>
+                <div class="login-button" id="loginButton">
+                    <button onclick="location.href='login.html'">Login</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
+        import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-database.js";
+        
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDqYgyH-rb98D9VTgxD8LZQViQmlh2VPCc",
+            authDomain: "abcd-d4c18.firebaseapp.com",
+            projectId: "abcd-d4c18",
+            storageBucket: "abcd-d4c18.appspot.com",
+            messagingSenderId: "816791968991",
+            appId: "1:816791968991:web:21dda24ed5aa43efee9d6a"
+        };
+    
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+    
+        // Get a reference to the database service
+        const db = getDatabase(app);
+    
+        document.getElementById("submit").addEventListener('click', function(e){
+            e.preventDefault();
+            set(ref(db, 'users/' + document.getElementById("username").value),
+            {
+                username: document.getElementById("username").value,
+                email: document.getElementById("email").value,
+                password: document.getElementById("password").value
+            }).then(() => {
+                alert("Sign Up Successful!");
+                // Redirect to login page
+                window.location.href = "login.html";
+            }).catch((error) => {
+                console.error("Error signing up:", error);
+                // Handle error if necessary
+            });
+        });
+    </script>
+    
+</body>
+</html>
+

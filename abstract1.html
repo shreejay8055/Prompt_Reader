@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Destination-Based Book Exploration</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">  <!-- Bootstrap Icons CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<!-- Add Firebase SDK -->
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
+    import { getDatabase } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-database.js";
+
+    // Your web app's Firebase configuration
+    const firebaseConfig = {
+        apiKey: "AIzaSyDqYgyH-rb98D9VTgxD8LZQViQmlh2VPCc",
+        authDomain: "abcd-d4c18.firebaseapp.com",
+        projectId: "abcd-d4c18",
+        storageBucket: "abcd-d4c18.appspot.com",
+        messagingSenderId: "816791968991",
+        appId: "1:816791968991:web:21dda24ed5aa43efee9d6a",
+        databaseURL: "https://abcd-d4c18-default-rtdb.firebaseio.com"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+</script>
+
+<style>
+    body {
+        background-image: url('https://images.pexels.com/photos/3747526/pexels-photo-3747526.jpeg?auto=compress&cs=tinysrgb&w=600');
+        background-size: cover;
+        background-position: center;
+        font-family: Arial, sans-serif;
+    }
+
+    #container {
+        max-width: 800px;
+        margin: auto;
+        padding: 20px;
+        background-color: rgba(255, 255, 255, 0.7);
+        border-radius: 10px;
+    }
+
+    .book-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 20px;
+    }
+
+    .book-item {
+        text-align: center;
+    }
+    
+    .book-item img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 5px;
+    }
+    
+    .book-name {
+        margin-top: 5px;
+        font-size: 14px;
+    }
+
+    #pdf-container {
+        margin-top: 20px;
+    }
+    
+    #pdf-viewer {
+        width: 100%;
+        height: 600px;
+        border: none;
+    }
+
+    /* Modal styles */
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgb(0,0,0);
+        background-color: rgba(0,0,0,0.4);
+        padding-top: 60px;
+    }
+
+    .modal-content {
+        background-color: #fefefe;
+        margin: 5% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%;
+    }
+
+    .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+    .close:hover,
+    .close:focus {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    .book-details {
+        margin-bottom: 20px;
+    }
+
+    .book-details h2, .book-details h3, .book-details p {
+        margin: 10px 0;
+    }
+
+    .open-view-button {
+        display: block;
+        width: 100%;
+        padding: 10px;
+        background-color: #4CAF50;
+        color: white;
+        text-align: center;
+        text-decoration: none;
+        border-radius: 5px;
+        margin-top: 20px;
+    }
+
+    .open-view-button:hover {
+        background-color: #45a049;
+    }
+
+    /* Menu bar styles */
+    .menu-bar {
+    background-color: #333;
+    overflow: hidden;
+    text-align: center; /* Center the text */
+}
+      .menu-bar a {
+        float: left;
+        display: block;
+        color: white;
+        text-align: center;
+        padding: 14px 16px;
+        text-decoration: none;
+    }
+
+    .menu-bar input[type="text"] {
+        float: left;
+        padding: 6px;
+        margin: 8px;
+        border: none;
+        width: 300px;
+    }
+
+    .menu-bar input[type="submit"] {
+        float: left;
+        padding: 6px 10px;
+        margin: 8px;
+        margin-left: 0;
+        background-color: #4CAF50;
+        border: none;
+        cursor: pointer;
+        color: white;
+    }
+
+    .menu-bar input[type="submit"]:hover {
+        background-color: #45a049;
+    }
+
+    /* Dropdown styles */
+.dropdown {
+    float: left;
+    overflow: hidden;
+}
+
+.dropbtn {
+    font-size: 16px;
+    border: none;
+    outline: none;
+    color: white;
+    padding: 14px 16px;
+    background-color: inherit;
+    font-family: inherit;
+    margin: 0;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    z-index: 1;
+}
+
+.dropdown-content a {
+    float: none;
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    text-align: left;
+}
+
+.dropdown-content a:hover {
+    background-color: #ddd;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.dropdown:hover .dropbtn {
+    background-color: #333;
+}
+
+</style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+          <!-- Left side of the navbar -->
+          <div class="d-flex">
+            <a class="navbar-brand" href="#">Home</a>
+            <a class="navbar-brand" href="./book-destination.html">Books</a>
+            <!-- Category Dropdown -->
+            <div class="dropdown">
+              <button class="btn btn-secondary dropdown-toggle" type="button" id="categoryDropdownButton" data-bs-toggle="dropdown" aria-expanded="false">
+                category
+			
+                <a class="navbar-brand" href="./catagory.html">Category</a>
+            </div>
+          </div>
+          
+          
+            </div>
+          </div>
+          
+          <!-- Right side of the navbar -->
+           <!-- Right side of the navbar -->
+    <div class="d-flex align-items-center">
+        <!-- Search Bar -->
+        <form class="d-flex me-3">
+          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+          <button class="btn btn-outline-success" type="submit"><i class="bi bi-search"></i></button>
+        </form>
+        <!-- Login and Signup Buttons -->
+        <a class="btn btn-primary me-2" href="./login.html" role="button">Login</a>
+        <a class="btn btn-primary" href="./signup.html" role="button">Sign up</a>
+      </div>
+        </div>
+      </nav>
+
+    <div id="container">
+        <h1>Destination-Based Book Exploration</h1>
+        
+        <div class="book-grid" id="book-grid"></div>
+        
+        <div id="pdf-container">
+            <embed id="pdf-viewer" type="application/pdf" />
+        </div>
+    </div>
+
+    <!-- The Modal -->
+    <div id="bookModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div class="book-details" id="book-details"></div>
+            <button id="view-book-button" class="open-view-button">Open View Book</button>
+        </div>
+    </div>
+
+    <script>
+        const books = {
+            "earth science": {
+                name: "Earth Science",
+                author: "John Doe",
+                abstract: "Earth Science by John Doe unveils the intricate workings of our planet, from its dynamic geological processes to the delicate balance of its ecosystems. The book delves into the fascinating world of plate tectonics, explaining how the Earth's crust is constantly in motion, shaping landscapes and influencing weather patterns. Readers embark on a journey through the atmosphere, exploring the forces that drive weather systems and the impact of human activity on global climate. The vital role of water is explored, delving into the hydrologic cycle and its crucial importance for all life on Earth. 'Earth Science' also sheds light on the remarkable biodiversity that thrives in our planet's diverse ecosystems, highlighting the interconnectedness of all living things. Written in a clear and engaging style, this book offers a captivating introduction to Earth's captivating story, igniting curiosity and fostering a deeper appreciation for our remarkable planet.",
+                coverUrl: "https://www.junkybooks.com/administrator/bookimages/64345fa85ea681.22424463.jpg",
+                pdfUrl: "https://www.junkybooks.com/book/reader.php?book=thebooks/64345fa85eaa0-earth-science.pdf"
+            },
+            "wall street": {
+                name: "Wall Street",
+                author: "Jane Smith",
+                abstract: "Navigate the exhilarating yet complex world of finance with Wall Street by Jane Smith. This book delves into the inner workings of the financial capital, offering insights for both aspiring investors and those curious about the forces that drive the global economy. Smith unpacks the intricate mechanisms of Wall Street, from the bustling trading floors to the sophisticated financial instruments. You'll gain an understanding of stocks, bonds, derivatives, and other investment vehicles. The book explores various investment strategies, helping you navigate the risks and rewards of different approaches. 'Wall Street' goes beyond technical details, delving into the psychology and culture that permeate the financial world. You'll learn about the key players – brokers, analysts, and hedge funds – and the strategies they employ. The book also examines the ethical considerations and potential pitfalls inherent in the financial system.",
+                coverUrl: "https://www.junkybooks.com/administrator/bookimages/65ba4c85008645.28192782.jpg",
+                pdfUrl: "https://www.junkybooks.com/book/reader.php?book=thebooks/65ba4c850089c-wall-street.pdf"
+            },
+            "power of self discipline": {
+                name: "Power of Self Discipline",
+                author: "Alex Johnson",
+                abstract: "Power of Self Discipline by Alex Johnson unlocks the secrets to achieving your goals. This book equips you with practical strategies for overcoming procrastination, building positive habits, and boosting your willpower. Learn to set SMART goals, establish routines, manage distractions, and develop mental resilience. Packed with actionable advice, 'Power of Self Discipline' empowers you to take control of your life and achieve lasting success.",
+                coverUrl: "https://www.junkybooks.com/administrator/bookimages/65df046d09c2d6.87772026.jpg",
+                pdfUrl: "https://www.junkybooks.com/book/reader.php?book=thebooks/65df046d09c57-power-of-self-discipline.pdf"
+            },
+            "the science of getting rich": {
+                name: "The Science Of Getting Rich",
+                author: "Wallace D. Wattles",
+                abstract: "The Science of Getting Rich by Wallace D. Wattles argues that acquiring wealth is not luck, but a science based on cultivating the right mindset. Wattles challenges the notion of scarcity and instead promotes a prosperity consciousness. The book outlines a systematic approach to achieving financial goals, emphasizing the power of clear intention, unwavering belief, and purposeful action. By aligning your thoughts and actions with the expectation of wealth, you unlock the universal laws of abundance, ultimately attracting prosperity into your life.",
+                coverUrl: "https://www.junkybooks.com/administrator/bookimages/65ad97b4c965c0.64854805.jpeg",
+                pdfUrl: "https://www.junkybooks.com/book/reader.php?book=thebooks/65ad97b4c969a-the-science-of-getting-rich.pdf"
+            },
+            "the book of business etiquette": {
+                name: "The Book of Business Etiquette",
+                author: "Nella Henney",
+                abstract: "'The Book of Business Etiquette' by Nella Henney serves as a detailed guide to mastering the social and professional nuances of the business world. Authored in the early 20th century, it highlights the critical role of proper conduct, manners, and interpersonal skills within a professional context. Henney offers in-depth advice on various subjects, including effective communication, appropriate attire, and the nuances of office interactions. She also explores the importance of first impressions, the art of conversation, and the protocols of business dining. Throughout the book, Henney emphasizes the significance of respect, courtesy, and consideration in cultivating successful business relationships. Her observations reflect the social norms of her era, providing a historical lens on business etiquette. Despite its vintage, many of the book's principles remain pertinent today, making it a valuable resource for those aiming to enhance their professional demeanor and create a harmonious workplace atmosphere.",
+                coverUrl: "https://www.junkybooks.com/administrator/bookimages/63061d6c0437f4.33185091.jpeg",
+                pdfUrl: "https://www.junkybooks.com/book/reader.php?book=thebooks/630623d4b8ea7-the-book-of-business-etiquette.pdf"
+            },
+            "affiliate marketing and success system": {
+                name: "Affiliate Marketing and Success System",
+                author: "Emily Davis",
+                abstract: "Affiliate Marketing and Success System authored by Emily Davis is a hands-on handbook tailored to aid readers in comprehending and mastering the intricacies of affiliate marketing. It delves deep into the core principles of affiliate marketing, providing guidance on selecting appropriate affiliate programs, crafting engaging content, and efficiently attracting traffic to optimize revenue. Davis presents systematic approaches for establishing a thriving affiliate marketing venture, stressing the significance of SEO, social media, and email marketing. Loaded with practical advice and relatable case studies, this book stands as an indispensable tool for individuals aiming to thrive in the realm of affiliate marketing.",
+                coverUrl: "https://www.junkybooks.com/administrator/bookimages/62e3b89c081f50.60963768.PNG",
+                pdfUrl: "https://www.junkybooks.com/book/reader.php?book=thebooks/62e3bd50e3c11-affiliate-marketing-and-success-systems.pdf"
+            },
+            "linux programming interface": {
+                name: "Linux Programming Interface",
+                author: "Michael Kerrisk",
+                abstract: "The Linux Programming Interface penned by Michael Kerrisk serves as an expansive manual, shedding light on the intricacies of Linux system programming. Encompassing a wide range of subjects, it provides invaluable understanding of system calls, library functions, and key components of Linux programming. Kerrisk diligently elucidates the inner mechanisms of the Linux kernel, supplemented with practical illustrations for enhanced comprehension. Whether exploring fundamental principles or delving into advanced methodologies, this book proves indispensable for programmers aiming to leverage the capabilities of the Linux OS. Its thorough coverage and authoritative direction render it a must-have reference for developers at all levels of expertise.",
+                coverUrl: "https://www.junkybooks.com/administrator/bookimages/63dd8ded8c3636.86035738.png",
+                pdfUrl: "https://www.junkybooks.com/book/reader.php?book=thebooks/63dd87413c358-the-linux-programming-interface.pdf"
+           
+            },
+            "business plan development guide": {
+                name: "Business Plan Development Guide",
+                author: "Dr. Lee Swanson",
+                abstract: "Business Plan Development Guide is an indispensable resource for entrepreneurs and business professionals alike. With a blend of academic rigor and practical wisdom, this guide offers a systematic approach to creating a robust business plan that aligns with your vision and objectives. From market analysis to financial forecasting, Dr. Swanson provides clear, actionable steps accompanied by insightful examples and case studies. Whether you're starting a new venture or seeking to revitalize an existing one, this guide empowers you to articulate your business strategy effectively and secure the resources needed for success.",
+                coverUrl: "https://www.junkybooks.com/administrator/bookimages/65ad93bb609dc4.49509710.jpg",
+                pdfUrl: "https://www.junkybooks.com/book/reader.php?book=thebooks/65ad93bb60a07-business-plan-development-guide.pdf"
+            },
+            "introduction to financial accounting": {
+                name: "Introduction to Financial Accounting",
+                author: "David Annand and Henry Dauderis",
+                abstract: "Introduction to Financial Accounting by David Annand and Henry Dauderis is a comprehensive guide designed to demystify the fundamentals of financial accounting for students and professionals alike. Through clear explanations and practical examples, Annand and Dauderis navigate readers through the core principles of accounting, including recording transactions, preparing financial statements, and interpreting financial data. The book emphasizes conceptual understanding while also providing hands-on exercises to reinforce learning. ",
+                coverUrl: "https://www.junkybooks.com/administrator/bookimages/659fb916d26473.71504988.jpg",
+                pdfUrl: "https://www.junkybooks.com/book/reader.php?book=thebooks/659fb916d269a-introduction-to-financial-accounting.pdf"
+            },
+            "aiming-higher-strategies": {
+                name: "aiming-higher-strategies",
+                author: "Mike Morley",
+                abstract: "Aiming Higher Strategies, Mike Morley presents a dynamic roadmap for personal and professional growth, offering strategies to unlock your full potential and achieve ambitious goals. Through a blend of motivational insights and practical advice, Morley guides readers on a journey of self-discovery and empowerment. Drawing from his extensive experience in leadership development and success coaching, Morley shares actionable techniques for setting clear objectives, overcoming obstacles, and maintaining momentum. Whether you're striving for career advancement, personal fulfillment, or both,Aiming Higher Strategies provides the tools and inspiration to elevate your life to new heights. ",
+                coverUrl: "https://www.junkybooks.com/administrator/bookimages/62c82b2c707736.99137957.jpg",
+                pdfUrl: "https://www.junkybooks.com/book/reader.php?book=thebooks/62c82b2c707c9-aiming-higher-strategies.pdf"
+            },
+            "the-new-confessions-of-an-economic-hit-man": {
+                name: "The New Confessions of an Economic Hit Man",
+                author: "John Perkins",
+                abstract: "The New Confessions of an Economic Hit Man, John Perkins delivers a gripping exposé that sheds light on the hidden mechanisms of global economic manipulation and exploitation. Building upon his groundbreaking original work, Perkins offers updated insights and revelations into the tactics employed by economic hit men to further the agendas of corporate and political elites.",
+                coverUrl: "https://www.junkybooks.com/administrator/bookimages/62e30b160ec240.36378255.JPG",
+                pdfUrl: "https://www.junkybooks.com/book/reader.php?book=thebooks/62e30b160ec6d-the-new-confessions-of-an-economic-hit-man.pdf"
+            },
+            "fire-water": {
+                name: "fire-water",
+                author: "",
+                abstract: "",
+                coverUrl: "https://www.junkybooks.com/administrator/bookimages/62bb5dc67a71f2.31406030.jpeg",
+                pdfUrl: "https://www.junkybooks.com/book/reader.php?book=thebooks/62bb5dd3a6c9c-fire-water.pdf"
+			},
+            "bronze-magic": {
+                name: "bronze-magic",
+                author: "Jennifer Ealey",
+                abstract: "Bronze Magic by Jennifer Ealey is a captivating fantasy novel that transports readers to a world where magic and mystery intertwine. Set in a realm where ancient prophecies and powerful sorcery shape the destiny of kingdoms, the story follows the journey of a young heroine named Elara. Born with a rare gift for manipulating bronze, Elara discovers her magical abilities amidst a backdrop of political intrigue and looming conflict. As she navigates a treacherous landscape filled with dark forces and hidden agendas, Elara must unravel the secrets of her past and harness her powers to protect those she loves.",
+                coverUrl: "https://www.junkybooks.com/administrator/bookimages/62bb6005e65666.61803270.jpeg",
+                pdfUrl: "https://www.junkybooks.com/book/reader.php?book=thebooks/62bb6005e657b-bronze-magic.pdf"
+            },
+            "adventures-of-huckleberry-finn": {
+                name: "adventures-of-huckleberry-finn",
+                author: "Mark Twain",
+                abstract: "The Adventures of Huckleberry Finn is a novel written by Mark Twain, first published in 1884. It follows the journey of Huckleberry Finn, a young boy who escapes his abusive father and embarks on a rafting adventure down the Mississippi River. Along the way, he encounters various characters, including the escaped slave Jim, with whom he forms a deep bond. The novel explores themes of friendship, freedom, and the moral conscience of society",
+                coverUrl: "https://www.junkybooks.com/administrator/bookimages/62cee4d31bbd60.45340025.jpg",
+                pdfUrl: "https://www.junkybooks.com/book/reader.php?book=thebooks/62cee4d31bc21-adventures-of-huckleberry-finn.pdf"	
+            },
+            "antonina-or-the-fall-of-rome": {
+                name: "antonina-or-the-fall-of-rome",
+                author: "Wilkie Collins",
+                abstract: "Antonina or The Fall of Rome by Wilkie Collins is a historical novel set against the backdrop of the decline of the Roman Empire. The story follows the lives of several characters whose fates intertwine amidst the chaos and turmoil of Rome's collapse. At the center of the narrative is Antonina, a young woman of noble birth who finds herself caught in a web of intrigue, betrayal, and political upheaval. As the city faces external threats and internal strife, Antonina must navigate a perilous path to protect herself and her loved ones.",
+                coverUrl: "https://www.junkybooks.com/administrator/bookimages/62c602a463c676.46474874.jpg",
+                pdfUrl: "https://www.junkybooks.com/book/reader.php?book=thebooks/62c602f43ce1f-antonina-or-the-fall-of-rome.pdf"
+            },
+            "internet-entrepreneurship-survival-guide": {
+                name: "internet-entrepreneurship-survival-guide",
+                author: "",
+                abstract: "",
+                coverUrl: "https://www.junkybooks.com/administrator/bookimages/62ce028934ea18.93392111.jpg",
+                pdfUrl: "https://www.junkybooks.com/book/reader.php?book=thebooks/62ce028934f65-internet-entrepreneurship-survival-guide.pdf"
+            },				
+        };
+
+        document.addEventListener("DOMContentLoaded", function() {
+            const bookGrid = document.getElementById("book-grid");
+
+            for (const key in books) {
+                if (books.hasOwnProperty(key)) {
+                    const book = books[key];
+
+                    const bookItem = document.createElement("div");
+                    bookItem.classList.add("book-item");
+
+                    const img = document.createElement("img");
+                    img.src = book.coverUrl;
+                    img.alt = book.name;
+
+                    const bookName = document.createElement("div");
+                    bookName.classList.add("book-name");
+                    bookName.textContent = book.name;
+
+                    bookItem.appendChild(img);
+                    bookItem.appendChild(bookName);
+
+                    bookItem.addEventListener("click", () => showBookDetails(book));
+                    bookGrid.appendChild(bookItem);
+                }
+            }
+
+            const modal = document.getElementById("bookModal");
+            const span = document.getElementsByClassName("close")[0];
+            const bookDetails = document.getElementById("book-details");
+            const viewBookButton = document.getElementById("view-book-button");
+
+            span.onclick = function() {
+                modal.style.display = "none";
+            };
+
+            window.onclick = function(event) {
+                if (event.target === modal) {
+                    modal.style.display = "none";
+                }
+            };
+
+            function showBookDetails(book) {
+                bookDetails.innerHTML = `
+                    <h2>${book.name}</h2>
+                    ${book.author ? `<h3>by ${book.author}</h3>` : ''}
+                    <p>${book.abstract}</p>
+                `;
+                viewBookButton.onclick = () => {
+                    document.getElementById("pdf-viewer").src = book.pdfUrl;
+                    modal.style.display = "none";
+                };
+                modal.style.display = "block";
+            }
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-OS+zgcDwlsZ5lbcbvC/Ag+jI5A8udU61aTcT8aG6cVbwn9w9HJqBBPnEokYZH8b4" crossorigin="anonymous"></script>
+
+</body>
+</html>
+
